@@ -6,7 +6,24 @@ for(i=0; i < blocks.length; i++){
 
 function match(){//create array of matching colours
     matchingBlocks = [this.id];
-    if((Number(this.id) - 1) >= 1 && (Number(this.id) - 1) <= 12){
+    console.log(matchingBlocks);
+    pos = this.getBoundingClientRect();
+    console.log(pos);
+    for(i=0; i < blocks.length; i++){
+        blockPos = blocks[i].getBoundingClientRect();
+        if(blockPos.right == pos.left && blockPos.y == pos.y|| blockPos.left == pos.right && blockPos.y == pos.y){
+            if(blocks[i].style.backgroundColor == this.style.backgroundColor){
+                matchingBlocks.push(blocks[i].id);
+            }
+        }
+    }
+    console.log(matchingBlocks);
+
+   
+
+
+    //document.elementFromPoint(x, y);
+    /*if((Number(this.id) - 1) >= 1 && (Number(this.id) - 1) <= 12){
         leftBlock = document.getElementById(this.id - 1);
         if(leftBlock.style.backgroundColor == this.style.backgroundColor){
             matchingBlocks.push(leftBlock.id);
@@ -20,6 +37,7 @@ function match(){//create array of matching colours
         }
         console.log(matchingBlocks);
     }
+    */
 }
 
 blocks.forEach(block => block.addEventListener('click', match));
