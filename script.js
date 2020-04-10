@@ -15,43 +15,50 @@ const blocks = document.querySelectorAll(".block");
 for(i=0; i < blocks.length; i++){
     blocks[i].style.backgroundColor = colours[Math.floor(Math.random() * colours.length)];
 }
-
-//process click action
-function clickAction(){
+function clickAction(){//process click action
     matchingBlocks = [this];
     match(this);
-    shuffleBlocks(this);
-    //console.log(matchingBlocks);
     if(matchingBlocks.length > 1){
         for(i=0; i < matchingBlocks.length; i++){
-            matchingBlocks[i].style.backgroundColor = '#ffffff';
-            //shuffleBlocks();
-            /*matchingBlocks[i].style.height = '0px';
-            matchingBlocks[i].style.padding = '0px';
-            matchingBlocks[i].style.border = '0px';*/
+            shuffleBlocks(matchingBlocks[i]);
         }
         score += matchingBlocks.length;
         console.log("Score: " +score);
     }
 }
 function shuffleBlocks(thisBlock){
-    let pos = thisBlock.getBoundingClientRect();
-    shuffle = 0;
-    for(let i=0; i < blocks.length; i++){//compare to all other blocks
-        blockPos = blocks[i].getBoundingClientRect();  //get block location            
-        if(blockPos.x == pos.x && blockPos.y < pos.y){//if in same column, but higher
-            colour = blocks[i].style.backgroundColor;//get current colour. Not currently working
-            console.log(colour);
-            if(shuffle == 0){
+    let pos = thisBlock.getBoundingClientRect();//clicked block
+    let shuffle = false;
+    let lastBlock = true;
+    let count = 0;
+    for(let i=0; i < blocks.length; i++){
+        blockPos = blocks[i].getBoundingClientRect();          
+        if(blockPos.x == pos.x && blockPos.y <= pos.y){//same column, but higher. include current block to change to that colour
+            colour = blocks[i].style.backgroundColor;
+            if(shuffle == false && blocks[i].style.backgroundColor != 'rgb(51, 204, 255)'){//apply to top visible block, rgb(51, 204, 255) = #33ccff
                 blocks[i].style.backgroundColor = '#33ccff';
-                blocks[i].style.border = '0px';
+                blocks[i].style.borderColor = '#33ccff';
+                blocks[i].removeEventListener('click', clickAction);//so people can't click on hidden divs to increase score
+                shuffle = true;
+            }else if(shuffle == false && blocks[i].style.backgroundColor == 'rgb(51, 204, 255)'){//do nothing
             }else{
                 blocks[i].style.backgroundColor = nextColour;
             }
             nextColour = colour;
-            console.log(nextColour);
-            shuffle ++;
+            //add check for last block in row
+            currentBlock = blocks[i];
+            count ++;
         }
+        if(blockPos.x == pos.x && blockPos.y > pos.y){
+            lastBlock = false;
+            console.log("false");
+        }
+    }
+    if(lastBlock == true){
+        console.log("true");
+        currentBlock.style.backgroundColor = '#33ccff';
+        currentBlock.style.borderColor = '#33ccff';
+        blocks[i].removeEventListener('click', clickAction);
     }
 }
 function match(thisBlock){//create array of matching colours
