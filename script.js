@@ -1,14 +1,15 @@
 let colours = ['#ff99ff', '#66ff66', '#9933ff', '#ffff66'];
 let score = 0;
 //Add blocks
-var toAdd = document.createDocumentFragment();
-for(var i= 1; i < 120; i++){
+
+var gameDiv = document.getElementById('game');
+console.log(gameDiv);
+for(var i= 1; i <= 120; i++){//var i=120-1; i>=0; i-- to go backwards
     var newDiv = document.createElement('div');
     newDiv.id = i;
     newDiv.className = 'block';
-    toAdd.appendChild(newDiv);
+    gameDiv.appendChild(newDiv);
 }
-document.body.appendChild(toAdd);
 
 //Select block colours
 const blocks = document.querySelectorAll(".block");
@@ -18,6 +19,7 @@ for(i=0; i < blocks.length; i++){
 function clickAction(){//process click action
     matchingBlocks = [this];
     match(this);
+    matchingBlocks = matchingBlocks.sort();
     if(matchingBlocks.length > 1){
         for(i=0; i < matchingBlocks.length; i++){
             shuffleBlocks(matchingBlocks[i]);
@@ -32,10 +34,17 @@ function shuffleBlocks(thisBlock){
     let lastBlock = true;
     let count = 0;
     for(let i=0; i < blocks.length; i++){
-        blockPos = blocks[i].getBoundingClientRect();          
+        blockPos = blocks[i].getBoundingClientRect(); 
+        if(blockPos.x == pos.x && blockPos.y > pos.y){
+            //lastBlock = false;
+            //console.log("false");
+        }else{
+            console.log("lastBlock");
+            shuffle = false;//will only affect things if the next loop is activated
+        }         
         if(blockPos.x == pos.x && blockPos.y <= pos.y){//same column, but higher. include current block to change to that colour
             colour = blocks[i].style.backgroundColor;
-            if(shuffle == false && blocks[i].style.backgroundColor != 'rgb(51, 204, 255)'){//apply to top visible block, rgb(51, 204, 255) = #33ccff
+            if(shuffle == false && blocks[i].style.backgroundColor != 'rgb(51, 204, 255)' ){//apply to top visible block, rgb(51, 204, 255) = #33ccff
                 blocks[i].style.backgroundColor = '#33ccff';
                 blocks[i].style.borderColor = '#33ccff';
                 blocks[i].removeEventListener('click', clickAction);//so people can't click on hidden divs to increase score
@@ -49,17 +58,14 @@ function shuffleBlocks(thisBlock){
             currentBlock = blocks[i];
             count ++;
         }
-        if(blockPos.x == pos.x && blockPos.y > pos.y){
-            lastBlock = false;
-            console.log("false");
-        }
+        
     }
-    if(lastBlock == true){
+    /*if(lastBlock == true){
         console.log("true");
         currentBlock.style.backgroundColor = '#33ccff';
         currentBlock.style.borderColor = '#33ccff';
         blocks[i].removeEventListener('click', clickAction);
-    }
+    }*/
 }
 function match(thisBlock){//create array of matching colours
     let pos = thisBlock.getBoundingClientRect();//have to use let, otherwise pos gets reset and this doesn't work

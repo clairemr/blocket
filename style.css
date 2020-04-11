@@ -1,13 +1,17 @@
 body{
     background: #33ccff;
 }
+
+.game{
+}
+
 .block{
     background: #ffffff;
     border-style: solid;
     border-width: 1px;
     border-color: #000000;
     height: 30px;
-    width: 45px;
+    width: 9%;
     float: left;
     padding: 1px;
 }
