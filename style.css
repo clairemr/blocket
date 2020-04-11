@@ -4,6 +4,15 @@ body{
 
 .game{
     background: #33ccff;
+    clear: both;
+}
+
+.header{
+    float: left;
+}
+
+.score{
+    float: right;
 }
 
 .block{

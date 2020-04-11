@@ -99,6 +99,7 @@ function calculateScore(addScore){
     if(addScore >= 10){totalScore += 3;}
     if(addScore >= 15){totalScore += 5;}
     score += totalScore;
+    document.getElementById("score").innerHTML="<h2>Score: " + score + "</h2>";
 }
 
 blocks.forEach(block => block.addEventListener('click', clickAction));
