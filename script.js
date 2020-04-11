@@ -3,7 +3,6 @@ let score = 0;
 //Add blocks
 
 var gameDiv = document.getElementById('game');
-console.log(gameDiv);
 for(var i= 1; i <= 120; i++){//var i=120-1; i>=0; i-- to go backwards
     var newDiv = document.createElement('div');
     newDiv.id = i;
@@ -19,32 +18,36 @@ for(i=0; i < blocks.length; i++){
 function clickAction(){//process click action
     matchingBlocks = [this];
     match(this);
-    matchingBlocks = matchingBlocks.sort();
+    matchingBlocks = matchingBlocks.sort((a, b) => (Number(a.id) > Number(b.id)) ? 1 : -1);//give property to sort by, convert id from string to number to sort properly
+    //console.log(matchingBlocks);
     if(matchingBlocks.length > 1){
         for(i=0; i < matchingBlocks.length; i++){
             shuffleBlocks(matchingBlocks[i]);
         }
-        score += matchingBlocks.length;
+        newScore = calculateScore(matchingBlocks.length);
         console.log("Score: " +score);
     }
 }
 function shuffleBlocks(thisBlock){
-    let pos = thisBlock.getBoundingClientRect();//clicked block
+    let pos = thisBlock.getBoundingClientRect();//selected block from matching array
     let shuffle = false;
-    let lastBlock = true;
+    let lastBlock = false;
     let count = 0;
     for(let i=0; i < blocks.length; i++){
         blockPos = blocks[i].getBoundingClientRect(); 
-        if(blockPos.x == pos.x && blockPos.y > pos.y){
-            //lastBlock = false;
+        /*if(blockPos.x == pos.x && blockPos.y > pos.y){//something below it
+            lastBlock = false;
             //console.log("false");
+        }else if(blockPos.x != pos.x){//another column
+            lastBlock = false;
         }else{
-            console.log("lastBlock");
-            shuffle = false;//will only affect things if the next loop is activated
-        }         
+            lastBlock = true;
+        }  */ 
+        
         if(blockPos.x == pos.x && blockPos.y <= pos.y){//same column, but higher. include current block to change to that colour
+            //console.log(lastBlock + blocks[i].id);
             colour = blocks[i].style.backgroundColor;
-            if(shuffle == false && blocks[i].style.backgroundColor != 'rgb(51, 204, 255)' ){//apply to top visible block, rgb(51, 204, 255) = #33ccff
+            if(shuffle == false && blocks[i].style.backgroundColor != 'rgb(51, 204, 255)'){//apply to top visible block, rgb(51, 204, 255) = #33ccff
                 blocks[i].style.backgroundColor = '#33ccff';
                 blocks[i].style.borderColor = '#33ccff';
                 blocks[i].removeEventListener('click', clickAction);//so people can't click on hidden divs to increase score
@@ -88,6 +91,14 @@ function match(thisBlock){//create array of matching colours
             }
         }
     }
+}
+
+function calculateScore(addScore){
+    let totalScore = addScore;
+    if(addScore >= 5){totalScore += 2;}//cumulative bonuses
+    if(addScore >= 10){totalScore += 3;}
+    if(addScore >= 15){totalScore += 5;}
+    score += totalScore;
 }
 
 blocks.forEach(block => block.addEventListener('click', clickAction));
