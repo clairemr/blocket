@@ -25,3 +25,12 @@ body{
     float: left;
     padding: 1px;
 }
+
+#inactive{/*id takes precedence over class*/
+    background: #33ccff;
+    border-width: 0px;
+    height: 30px;
+    width: 0%;
+    float: left;
+    padding: 0px;
+}
