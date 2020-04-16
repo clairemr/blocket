@@ -11,7 +11,7 @@ body{
     float: left;
 }
 
-.score{
+.score, .level{
     float: right;
 }
 
@@ -42,4 +42,20 @@ table {
     width: 0%;
     float: left;
     padding: 0px;
+}
+
+.buttons{
+    margin: auto;
+}
+button{
+    margin: 2px;
+    height: 30px;
+    width: 90px;
+    border-radius: 8px;
+    padding: 2px;
+}
+
+.levelUpButton{
+    display: none;
+    background: #3ddf52;
 }

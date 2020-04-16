@@ -8,7 +8,12 @@
 <body>
     <div class="header"><h1>Blocket: <small><br/>Match the blocks to win!</small></h1></div>
     <div class="score" id="score"><h2>Score: 0</h2></div>
+    <br/><div class="level" id="level"><h2>Level: 1</h2></div>
     <div class="game" id="game"></div>
+    <div class="buttons" id="buttons">
+        <button onclick='reloadPage()'>Try Again</button>
+        <button onclick='levelUp()' class='levelUpButton' id="levelUp">Next Level</button>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>

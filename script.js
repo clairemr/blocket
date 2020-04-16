@@ -1,33 +1,55 @@
-let colours = ['#ff99ff', '#66ff66', '#9933ff', '#ffff66'];
 let score = 0;
-let width = 10;
-let height = 12;
-
-
-//Add blocks
-var gameDiv = document.getElementById('game');
-table = document.createElement('table')
-let blockCount = 1;
-for(var x=1; x <= height; x++){
-    row = table.insertRow();
-    for(var i= 1; i <= width; i++){//var i=120-1; i>=0; i-- to go backwards
-        cell = row.insertCell();
-        cell.id = blockCount;
-        cell.setAttribute("class", "block");
-        blockCount ++;
+let level = 1;
+function construct(score, level){
+    switch(level) {
+        case 1:
+            width = 10;
+            height = 12;
+          break;
+        case 2:
+            width = 12;
+            height = 14;
+          break;
+        case 3:
+            width = 15;
+            height = 15;
+          break;
+        default:
+            width = 10;
+            height = 12;
+      }
+    document.getElementById("level").innerHTML="<h2>Level: " + level + "</h2>";
+    colours = ['#ff99ff', '#66ff66', '#9933ff', '#ffff66'];
+    
+    //Add blocks
+    var gameDiv = document.getElementById('game');
+    table = document.createElement('table')
+    blockCount = 1;
+    for(var x=1; x <= height; x++){
+        row = table.insertRow();
+        for(var i= 1; i <= width; i++){//var i=120-1; i>=0; i-- to go backwards
+            cell = row.insertCell();
+            cell.id = blockCount;
+            cell.setAttribute("class", "block");
+            blockCount ++;
+        }
     }
+    document.getElementById('game').appendChild(table);
+
+
+    //Select block colours
+    blocks = document.querySelectorAll(".block");
+    for(i=0; i < blocks.length; i++){
+        blocks[i].style.backgroundColor = colours[Math.floor(Math.random() * colours.length)];
+    }
+
+    //Add event listener, tied to clickAction() function
+    blocks.forEach(block => block.addEventListener('click', clickAction));
 }
-document.getElementById('game').appendChild(table);
 
+construct(0, 1);
+console.log(score);
 
-//Select block colours
-const blocks = document.querySelectorAll(".block");
-for(i=0; i < blocks.length; i++){
-    blocks[i].style.backgroundColor = colours[Math.floor(Math.random() * colours.length)];
-}
-
-//Add event listener, tied to clickAction() function
-blocks.forEach(block => block.addEventListener('click', clickAction));
 
 //Process click action
 function clickAction(){
@@ -45,7 +67,8 @@ function clickAction(){
                 console.log("columns to shrink" + matchingBlocks[i].id);
             }
         }
-        newScore = calculateScore(matchingBlocks.length);
+        //newScore = calculateScore(matchingBlocks.length);
+        calculateScore(matchingBlocks.length);
         console.log("Score: " +score);
     }
 }
@@ -115,6 +138,12 @@ function calculateScore(addScore){
     if(addScore >= 15){totalScore += 5;}
     score += totalScore;
     document.getElementById("score").innerHTML="<h2>Score: " + score + "</h2>";
+    if(score >= (75*level)){
+        levelUpButton = document.getElementById("levelUp");
+        if(levelUpButton.style.display === ""){
+            levelUpButton.style.display = "block";
+        }        
+    }
 }
 
 function shrinkColumns(matchedBlock){
@@ -139,4 +168,16 @@ function shrinkColumns(matchedBlock){
             columnBlocks[i].id = "inactive";
         }
     }
+}
+
+function reloadPage(){
+    //window.location.reload(true)//true = reload from server, false = from cache
+    document.getElementById("game").innerHTML = "";
+    construct(0,1);
+}
+
+function levelUp(totalScore){
+    level++;
+    document.getElementById("game").innerHTML = "";
+    construct(score,level);
 }
