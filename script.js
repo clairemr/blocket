@@ -138,10 +138,10 @@ function calculateScore(addScore){
     if(addScore >= 15){totalScore += 5;}
     score += totalScore;
     document.getElementById("score").innerHTML="<h2>Score: " + score + "</h2>";
-    if(score >= (110*level)){
+    if(score >= (5*level)){
         levelUpButton = document.getElementById("levelUp");
         if(levelUpButton.style.display === ""){
-            if(level < 3){//Display unchanged level up button
+            if(level > 3){//Display unchanged level up button
             }else{//show win button
                 levelUpButton.onclick = function () { completeGame() };
                 document.querySelector('#levelUp').innerText = 'Complete Game';//for some reason levelUPButton didn't work
@@ -155,7 +155,8 @@ function calculateScore(addScore){
 
 function completeGame(){
     levelUpButton.style.display = "";
-    document.getElementById("game").innerHTML = "<h2>You win!<br/>Score: "+score+"</h2>";
+    document.getElementById("game").innerHTML = "<img src='Congratulations.gif'>";
+    document.getElementById("game").innerHTML += "<h2>You win!<br/>Score: "+score+"</h2>";
 }
 
 function shrinkColumns(matchedBlock){
