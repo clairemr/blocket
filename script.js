@@ -138,10 +138,10 @@ function calculateScore(addScore){
     if(addScore >= 15){totalScore += 5;}
     score += totalScore;
     document.getElementById("score").innerHTML="<h2>Score: " + score + "</h2>";
-    if(score >= (5*level)){
+    if(score >= (110*level)){
         levelUpButton = document.getElementById("levelUp");
         if(levelUpButton.style.display === ""){
-            if(level > 3){//Display unchanged level up button
+            if(level < 3){//Display unchanged level up button
             }else{//show win button
                 levelUpButton.onclick = function () { completeGame() };
                 document.querySelector('#levelUp').innerText = 'Complete Game';//for some reason levelUPButton didn't work
