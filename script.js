@@ -1,5 +1,5 @@
-let score = 0;
-let level = 1;
+var score = 0;
+var level = 1;
 function construct(score, level){
     switch(level) {
         case 1:
@@ -138,12 +138,24 @@ function calculateScore(addScore){
     if(addScore >= 15){totalScore += 5;}
     score += totalScore;
     document.getElementById("score").innerHTML="<h2>Score: " + score + "</h2>";
-    if(score >= (75*level)){
+    if(score >= (110*level)){
         levelUpButton = document.getElementById("levelUp");
         if(levelUpButton.style.display === ""){
+            if(level < 3){//Display unchanged level up button
+            }else{//show win button
+                levelUpButton.onclick = function () { completeGame() };
+                document.querySelector('#levelUp').innerText = 'Complete Game';//for some reason levelUPButton didn't work
+            }
             levelUpButton.style.display = "block";
-        }        
+        } 
+        
+              
     }
+}
+
+function completeGame(){
+    levelUpButton.style.display = "";
+    document.getElementById("game").innerHTML = "<h2>You win!<br/>Score: "+score+"</h2>";
 }
 
 function shrinkColumns(matchedBlock){
@@ -163,7 +175,7 @@ function shrinkColumns(matchedBlock){
         }
     }
     columnBlocks = columnBlocks.sort((a, b) => (Number(a.id) > Number(b.id)) ? -1 : 1);//reverse sort order
-    if(count == 12){//not yet working
+    if(count == height){//not yet working
         for(let i=0; i < columnBlocks.length; i++){
             columnBlocks[i].id = "inactive";
         }
@@ -179,5 +191,7 @@ function reloadPage(){
 function levelUp(totalScore){
     level++;
     document.getElementById("game").innerHTML = "";
+    levelUpButton = document.getElementById("levelUp");
+    levelUpButton.style.display = "";
     construct(score,level);
 }
